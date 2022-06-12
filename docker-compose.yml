@@ -2,7 +2,7 @@ services:
   postgres:
     image: postgres:14-alpine
     restart: always
-    environment: 
+    environment:
       - POSTGRES_PASSWORD=${DB_PASSWORD}
     ports:
       - ${DB_PORT}:5432
@@ -12,7 +12,7 @@ services:
   api:
     container_name: servindo_cms_api
     restart: always
-    image: servindo-cms-be/nodejs
+    image: farizalfairuz/servindo-cms-be:checkrole
     command: sh -c './wait-for-it.sh postgres:5432 -- npm run sequelize:db:seed ; node src/index.js'
     ports:
       - 8000:8000
@@ -28,6 +28,8 @@ services:
       - DB_PORT=${DB_PORT}
       - DB_DIALECT=${DB_DIALECT}
       - CORS_ORIGIN=${CORS_ORIGIN}
+      - HTTP_PORT=${HTTP_PORT}
+      - HTTPS_PORT=${HTTPS_PORT}
 
 volumes:
   postgres:
